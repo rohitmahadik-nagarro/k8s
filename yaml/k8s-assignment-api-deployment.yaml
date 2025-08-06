@@ -58,7 +58,7 @@ kind: Service
 metadata:
   name: k8s-api
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: k8s-api
   ports:
