@@ -4,6 +4,8 @@ Docker hub URL - https://hub.docker.com/r/rohitmahadik/k8s
 
 Service API tier URL - http://k8s-api.local/api/employee
 
+Demo Recording - https://nagarro-my.sharepoint.com/:v:/p/rohit_mahadik/EXnqAoOB4gxOu1MpQo_sdlsBo7G_3ewtR4vPt593PBJxsg
+
 # Kubernetes Setup for API and Database Deployment
 
 This repository contains the Kubernetes configuration files required to deploy a PostgreSQL database and an API service on a Kubernetes cluster. It also includes ingress configuration using the NGINX Ingress Controller to expose the API externally.
