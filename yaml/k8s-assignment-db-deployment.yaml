@@ -19,12 +19,23 @@ spec:
         ports:
         - containerPort: 5432
         env:
+        # Database configuration from ConfigMap
         - name: POSTGRES_DB
-          value: k8s_assignment
+          valueFrom:
+            configMapKeyRef:
+              name: database-config
+              key: DB_NAME
         - name: POSTGRES_USER
-          value: postgres
+          valueFrom:
+            configMapKeyRef:
+              name: database-config
+              key: DB_USER
+        # Database password from Secret
         - name: POSTGRES_PASSWORD
-          value: yourpassword
+          valueFrom:
+            secretKeyRef:
+              name: database-secret
+              key: DB_PASSWORD
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
         volumeMounts:

@@ -22,15 +22,43 @@ spec:
           value: "http://+:80"
         - name: ASPNETCORE_ENVIRONMENT
           value: "Production"
+
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: database-config
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: database-config
+              key: DB_PORT
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: database-config
+              key: DB_NAME
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: database-config
+              key: DB_USER
+
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-secret
+              key: DB_PASSWORD
+
         - name: ConnectionStrings__DefaultConnection
-          value: "Host=k8s-db;Port=5432;Database=k8s_assignment;Username=postgres;Password=yourpassword"
+          value: "Host=$(DB_HOST);Port=$(DB_PORT);Database=$(DB_NAME);Username=$(DB_USER);Password=$(DB_PASSWORD)"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: k8s-api
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: k8s-api
   ports:

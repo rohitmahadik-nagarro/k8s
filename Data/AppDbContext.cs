@@ -13,8 +13,19 @@ namespace k8s_assignment.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // Use PostgreSQL if no options are configured (for migrations)
-                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=k8s_assignment;Username=postgres;Password=yourpassword");
+                var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+                var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
+                var database = Environment.GetEnvironmentVariable("DB_NAME") ?? "k8s_assignment";
+                var username = Environment.GetEnvironmentVariable("DB_USER") ?? "postgres";
+                var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
+                
+                if (string.IsNullOrEmpty(password))
+                {
+                    throw new InvalidOperationException("DB_PASSWORD environment variable is required but not set. Please set the database password as an environment variable.");
+                }
+                
+                var connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password}";
+                optionsBuilder.UseNpgsql(connectionString);
             }
         }
     }
