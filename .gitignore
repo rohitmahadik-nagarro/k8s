@@ -9,6 +9,7 @@ obj
 .env.production.local
 
 # Docker environment files
+.env.docker
 .env.docker.local
 
 # User secrets
