@@ -27,6 +27,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Register EmployeeRepository and EmployeeService for DI
+builder.Services.AddScoped<k8s_assignment.Repositories.IEmployeeRepository, k8s_assignment.Repositories.EmployeeRepository>();
+builder.Services.AddScoped<k8s_assignment.Services.IEmployeeService, k8s_assignment.Services.EmployeeService>();
+
 var app = builder.Build();
 
 // Seed the database with default records

@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using k8s_assignment.Data;
 using k8s_assignment.Models;
+using k8s_assignment.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace k8s_assignment.Controllers
 {
@@ -9,24 +10,24 @@ namespace k8s_assignment.Controllers
     [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public EmployeeController(AppDbContext context)
+        private readonly IEmployeeService _employeeService;
+        public EmployeeController(IEmployeeService employeeService)
         {
-            _context = context;
+            _employeeService = employeeService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Employee>>> GetAll()
         {
-            return await _context.Employees.ToListAsync();
+            var employees = await _employeeService.GetAllAsync();
+            return Ok(employees);
         }
 
         [HttpPost]
         public async Task<ActionResult<Employee>> Post(Employee employee)
         {
-            _context.Employees.Add(employee);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetAll), new { id = employee.Id }, employee);
+            var created = await _employeeService.AddAsync(employee);
+            return CreatedAtAction(nameof(GetAll), new { id = created.Id }, created);
         }
     }
 }
