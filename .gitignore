@@ -1,3 +1,26 @@
 bin
 obj
 
+# Local environment configuration
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Docker environment files
+.env.docker.local
+
+# User secrets
+secrets.json
+
+# IDE specific files
+.vscode/
+.vs/
+*.user
+*.suo
+*.cache
+
+# Temporary files
+temp-*.yaml
+
