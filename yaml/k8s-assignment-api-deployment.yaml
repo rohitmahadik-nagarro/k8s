@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-api
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: k8s-api
+  template:
+    metadata:
+      labels:
+        app: k8s-api
+    spec:
+      containers:
+      - name: k8s-api
+        image: rohitmahadik/k8s:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:80"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        - name: ConnectionStrings__DefaultConnection
+          value: "Host=k8s-db;Port=5432;Database=k8s_assignment;Username=postgres;Password=yourpassword"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: k8s-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

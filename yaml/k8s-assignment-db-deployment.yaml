@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: k8s-db
+spec:
+  serviceName: k8s-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-db
+  template:
+    metadata:
+      labels:
+        app: k8s-db
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:16
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: k8s_assignment
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: yourpassword
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-db
+spec:
+  clusterIP: None
+  selector:
+    app: k8s-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
